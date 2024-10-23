@@ -100,6 +100,11 @@ class ShipmentRequest extends Base
             'required' => false,
             'subobject' => true,
         ],
+        'ValueAddedServices' => [
+            'type' => 'ValueAddedServices',
+            'required' => false,
+            'subobject' => true,
+        ],
         'Consignee' => [
             'type' => 'Consignee',
             'required' => false,
