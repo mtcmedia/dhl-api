@@ -13,3 +13,5 @@ v2.0.2 - Examples updated
 v2.0.3 - Updates to Shipper & Consignee objects
 
 v2.0.4 - introduced OtherCharges parameter
+
+v2.0.10 - Added ItemReferences/ItemReference to EU ExportLineItem, to support 2026 EU Customs Reform (EUCR) Product Identifiers (Merchant/Manufacturer PID) at line-item level

@@ -110,5 +110,12 @@ class ExportLineItem extends \Mtc\Dhl\Datatype\AM\ExportLineItem
             'minLength' => '1',
             'maxLength' => '20',
         ],
+        'ItemReferences' => [
+            'type' => 'ItemReference',
+            'required' => false,
+            'subobject' => true,
+            'multivalues' => true,
+            'comment' => 'Export Declaration Line Item References (e.g. EUCR Product Identifiers)',
+        ],
     ];
 }
