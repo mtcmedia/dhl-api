@@ -3,6 +3,7 @@ Example request:
 ```php
 use Mtc\Dhl\Client\Web;
 use Mtc\Dhl\Datatype\AM\DocImage;
+use Mtc\Dhl\Datatype\AM\ItemReference;
 use Mtc\Dhl\Datatype\EU\AdditionalProtection;
 use Mtc\Dhl\Datatype\EU\ExportLineItem;
 use Mtc\Dhl\Datatype\EU\GrossWeight;
@@ -165,6 +166,25 @@ foreach ($order->items as $index => $item) {
     }
     if (!empty($item->import_commodity_code)) {
         $export_item->ImportCommodityCode = $item->import_commodity_code;
+    }
+
+    // 2026 EU Customs Reform (EUCR) Product Identifiers - required on every
+    // line item for B2C shipments into the EU27 from 1 November 2026.
+    // ABW (Merchant) and MF (Non-Standardised Manufacturer) may reuse the
+    // same product code if no separate manufacturer identifier exists.
+    // send_eucr_item_references is an explicit per-client opt-in, so a
+    // client that hasn't configured this isn't affected even if their own
+    // data happens to include a ProductCode field for an unrelated reason.
+    if (!empty($order->send_eucr_item_references) && !empty($item->ProductCode)) {
+        $merchant_reference = new ItemReference();
+        $merchant_reference->ItemReferenceType = 'ABW';
+        $merchant_reference->ItemReferenceNumber = (string) $item->ProductCode;
+        $export_item->addItemReference($merchant_reference);
+
+        $manufacturer_reference = new ItemReference();
+        $manufacturer_reference->ItemReferenceType = 'MF';
+        $manufacturer_reference->ItemReferenceNumber = (string) $item->ProductCode;
+        $export_item->addItemReference($manufacturer_reference);
     }
 
     $shipment->ExportDeclaration->addExportLineItem($export_item);
